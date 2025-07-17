@@ -3,10 +3,11 @@ package com.project.car_shop.model.dtos;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class ProductDto implements Serializable {
+public class ProductDTO implements Serializable {
 
     private Long id;
     private String brand;
@@ -15,4 +16,5 @@ public class ProductDto implements Serializable {
     private Integer capacity;
     private Double price;
     private Date yearOfManufacture;
+    private BigDecimal discount;
 }

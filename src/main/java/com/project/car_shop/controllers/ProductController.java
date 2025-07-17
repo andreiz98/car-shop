@@ -1,11 +1,9 @@
 package com.project.car_shop.controllers;
 
-import com.project.car_shop.model.dtos.ProductDto;
+import com.project.car_shop.model.dtos.ProductDTO;
 import com.project.car_shop.services.implementation.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +18,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> findAllProducts(){
-        return ResponseEntity.ok(productService.findAllProduct());
+    public ResponseEntity<List<ProductDTO>> findAllProducts(){
+        return ResponseEntity.ok(productService.findAllProducts());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductDTO>> findProductByBrandAndColourAndCapacityAndPrice
+            (
+                    @RequestParam String brand,
+                    @RequestParam String color,
+                    @RequestParam Integer capacity,
+                    @RequestParam Double price
+            ){
+        return ResponseEntity.ok(productService.findProductByBrandAndColorAndCapacityAndPrice(brand, color, capacity, price));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProductById(@PathVariable long id){
+        productService.deleteProductById(id);
     }
 }

@@ -1,8 +1,9 @@
 package com.project.car_shop.services.implementation;
 
-import com.project.car_shop.model.dtos.ProductDto;
+import com.project.car_shop.model.dtos.ProductDTO;
 import com.project.car_shop.model.entities.Product;
 import com.project.car_shop.repository.ProductRepository;
+import com.project.car_shop.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProductService implements com.project.car_shop.services.ProductService {
+public class ProductService implements ProductServices {
 
 
     private final ProductRepository repository;
@@ -21,21 +22,35 @@ public class ProductService implements com.project.car_shop.services.ProductServ
     }
 
     @Override
-    public List<ProductDto> findAllProduct() {
-        List<ProductDto> productDtos = new ArrayList<>();
-        repository.findAll().forEach(product -> fromEntityToDto(productDtos, product));
-        return productDtos;
+    public List<ProductDTO> findAllProducts() {
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        repository.findAll().forEach(product -> fromEntityToDto(productDTOS, product));
+        return productDTOS;
     }
 
-    private void fromEntityToDto(List<ProductDto> productDtos, Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setBrand(product.getBrand());
-        productDto.setModel(product.getModel());
-        productDto.setColor(product.getColor());
-        productDto.setCapacity(product.getCapacity());
-        productDto.setPrice(product.getPrice());
-        productDto.setYearOfManufacture(product.getYearOfManufacture());
-        productDtos.add(productDto);
+    @Override
+    public List<ProductDTO> findProductByBrandAndColorAndCapacityAndPrice(String brand, String color, int capacity, double price) {
+        List<Product> products = repository.findProductByBrandAndColorAndCapacityAndPrice(brand, color, capacity, price);
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        products.forEach(product -> fromEntityToDto(productDTOS, product));
+        return productDTOS;
+    }
+
+    @Override
+    public void deleteProductById(Long id) {
+        repository.deleteById(id);
+    }
+
+    private void fromEntityToDto(List<ProductDTO> productDTOS, Product product) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setBrand(product.getBrand());
+        productDTO.setModel(product.getModel());
+        productDTO.setColor(product.getColor());
+        productDTO.setCapacity(product.getCapacity());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setYearOfManufacture(product.getYearOfManufacture());
+        productDTO.setDiscount(product.getDiscount());
+        productDTOS.add(productDTO);
     }
 }
